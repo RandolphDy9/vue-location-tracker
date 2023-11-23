@@ -1,14 +1,32 @@
+import { createApp } from 'vue';
+import App from './App.vue';
+import router from './router';
+import 'vue-toastification/dist/index.css';
+import Toast from 'vue-toastification';
+import './assets/styles.css';
 
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
-import './assets/styles.css'
-import Toast from 'vue-toastification'
-import 'vue-toastification/dist/index.css'
+// Load Google Maps script
+const API_KEY = import.meta.env.VITE_APP_GOOGLE_API_KEY;
+const loadGoogleMapsScript = () => {
+  const script = document.createElement('script');
+  script.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}&libraries=places`;
+  script.defer = true;
+  script.async = true;
 
-const app = createApp(App)
+  script.onload = () => {
+    // The Google Maps API has loaded, you can now use it in your app
+    app.mount('#app');
+  };
 
-app.use(router)
-app.use(Toast)
+  document.head.appendChild(script);
+};
 
-app.mount('#app')
+// Create Vue app
+const app = createApp(App);
+
+// Use router and Toast plugin
+app.use(router);
+app.use(Toast);
+
+// Wait for the Google Maps script to load before mounting the app
+loadGoogleMapsScript();
